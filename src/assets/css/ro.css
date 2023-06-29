@@ -1,0 +1,51 @@
+.dropdown-toggle-black {
+  color: black !important;
+  position: relative;
+  font-size: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.arrow-black {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-top: 4px solid black;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  margin-left: -50px; /* Adjust the margin value as needed */
+}
+
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 15px;
+}
+
+
+
+
+.gradient-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to right, #2E3192, #1BFFFF);
+  z-index: -1;
+}
+
+/* .card-login {
+  background: linear-gradient(to right, #02AABD, #00CDAC);
+  color: white;
+} */
+
+.login-card-header {
+  font-family: "Random Font", sans-serif;
+  font-weight: bold;
+}
+
