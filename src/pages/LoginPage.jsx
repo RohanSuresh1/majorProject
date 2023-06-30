@@ -1,5 +1,5 @@
-import React, { useState,useContext} from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -13,56 +13,81 @@ import {
   Container,
   Col,
   Row,
-  Form
+  Form,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
-import axios from 'axios';
-import AuthContext from "contextApi/AuthContext";
+import axios from "axios";
+import ForgetPassword from "./Forgetpass";
 
 const LoginPage = () => {
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
     axios.defaults.withCredentials = true;
-    axios.post('https://weatherapp-api.azurewebsites.net/api/Auth/Login', { username, password })
-      .then(response => {
-        //console.log(response.data); // Display the response data in the console
+    axios
+      .post("https://weatherapp-api.azurewebsites.net/api/Auth/Login", {
+        username,
+        password,
+      })
+      .then((response) => {
         const user = response.data;
         if (user) {
-          console.log('Login successful');
-          authCtx.login(user); // Display success message in the console
-          navigate('/Dashboard'); //do context api 
+          console.log("Login successful");
+          navigate("/admin/dashboard");
         } else {
-          setErrorMessage('Wrong username or password');
+          setErrorMessage("Wrong username or password");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         if (error.response) {
-          console.log(error.response.data); // Display the response data in the console
-          console.log(error.response.status); // Display the HTTP status code in the console
-          console.log(error.response.headers); // Display the response headers in the console
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
         }
       });
   };
 
+  const toggleForgotPassword = () => {
+    setShowForgotPassword(!showForgotPassword);
+  };
+
   return (
-    <div className="login-page" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+    <div
+      className="login-page"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
       <div className="gradient-background" />
       <Container>
         <Row>
-          <Col className="ml-auto mr-auto" lg="6" md="7" style={{ marginLeft: "300px" }}>
+          <Col
+            className="ml-auto mr-auto"
+            lg="6"
+            md="7"
+            style={{ marginLeft: "300px" }}
+          >
             <Form className="form" onSubmit={handleLogin}>
-              <Card className="card-login" >
+              <Card className="card-login">
                 <CardHeader className="login-card-header">
                   <h3 className="header text-center">Weather Station</h3>
                 </CardHeader>
                 <CardBody>
-                  {errorMessage && <div className="error-message">{errorMessage}</div>}
+                  {errorMessage && (
+                    <div className="error-message">{errorMessage}</div>
+                  )}
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
@@ -101,14 +126,32 @@ const LoginPage = () => {
                   >
                     Login
                   </Button>
+                  <Button
+                    color="link"
+                    className="btn-round mb-3"
+                    onClick={toggleForgotPassword}
+                  >
+                    Forgot Password?
+                  </Button>
                 </CardFooter>
               </Card>
             </Form>
           </Col>
         </Row>
       </Container>
+      <Modal isOpen={showForgotPassword} toggle={toggleForgotPassword}>
+        <ModalHeader toggle={toggleForgotPassword}>Forgot Password</ModalHeader>
+        <ModalBody>
+          <ForgetPassword />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleForgotPassword}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
-}
+};
 
 export default LoginPage;

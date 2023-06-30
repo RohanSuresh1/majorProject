@@ -29,6 +29,7 @@ import axios from "axios";
 import AuthContext from "contextApi/AuthContext";
 
 
+import WeatherStationsContext from "contextApi/WeatherStationsContext";
 
 import routes from "routes.js";
 
@@ -45,12 +46,8 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
   const mainPanel = React.useRef();
   const [errorMessage, setErrorMessage] = useState('');
   const authCtx = useContext(AuthContext);
-  const weatherDropdownOptions=authCtx.userDetails?.weatherStations?.map(item=>{
-    return(
-      [item.weatherStationID,item.weatherStationName]
-    
-    )
-   
+  const wStationsCtx= useContext(WeatherStationsContext);
+  const weatherDropdownOptions=authCtx.userDetails?.weatherStations?.map(item=>{   
   })
 //console.log(weatherDropdownOptions)
   useEffect(()=>{
@@ -62,6 +59,8 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
         if (user) {
           //console.log('Login successful');
           authCtx.login(user); // Display success message in the console
+          setWeatherStationSelected(user.weatherStation?.[0].weatherStationName);
+          wStationsCtx.setCurrentWeatherStation(user.weatherStations?.[0].weatherStationName);
         
         } else {
           setErrorMessage('Wrong username or password');
@@ -124,6 +123,7 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
     document.body.classList.toggle("sidebar-mini");
   };
   return (
+    
     <div className="wrapper">
       <Sidebar
         {...props}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -9,15 +9,17 @@ import {
 } from "reactstrap";
 
 import "assets/css/ro.css";
+import WeatherStationsContext from "contextApi/WeatherStationsContext";
 
 const AdminNavbar=(props)=> {
   const {options,changeHandler}={...props}
-  //console.log(options)
+  const wStationCtx=useContext(WeatherStationsContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option[1]);
     changeHandler(option[1]);
+    wStationCtx.setCurrentWeatherStation(option[1])
   };
 useEffect(()=>{
   if(options?.length>0)

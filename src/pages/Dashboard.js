@@ -34,11 +34,13 @@ import {
   chartExample8,
 } from "variables/charts.js";
 
+import WeatherStationsContext from 'contextApi/WeatherStationsContext';
 
 const Dashboard=(props)=> {
   console.log(props)
   const [errorMessage, setErrorMessage] = useState('');
   const authCtx = useContext(AuthContext);
+  const wStationCtx=useContext(WeatherStationsContext);
   console.log(authCtx);
   
   return (
@@ -90,7 +92,9 @@ const Dashboard=(props)=> {
             <Col md="9">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4" style={{ fontWeight: 'bold', fontSize: '20px', color: 'black' }}  >Add your heading here</CardTitle>
+                  <CardTitle tag="h4" style={{ fontWeight: 'bold', fontSize: '20px', color: 'black' }} >
+                  {wStationCtx.currentWeatherStation}
+                  </CardTitle>
                   {/* <p className="card-category">All products that were shipped</p> */}
                 </CardHeader>
                 <CardBody style={{ height: "470px" }}>
