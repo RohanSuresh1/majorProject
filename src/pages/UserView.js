@@ -37,12 +37,9 @@ function UserView() {
   const [lastName, setLastName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [emailId, setEmailId] = useState("");
-  const [selectedRole, setSelectedRole] = useState(null);
-  const [roles, setRoles] = useState([
-    {  name: "Super Admin" },
-    {  name: "Admin" },
-    {  name: "User" },
-  ]);
+  const [selectedRole, setSelectedRole] = useState([]);
+  const [roles, setRoles] = useState([]);
+
 
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
@@ -60,19 +57,28 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
   )[0].weatherStationID;
 
   useEffect(() => {
-    if(!wStationCtx.currentWeatherStation) return;
+    if (!wStationCtx.currentWeatherStation) return;
     axios.defaults.withCredentials = true;
     axios
-      .get(`https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}`
-      )
+      .get(`https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}`)
       .then((response) => {
-       const {data} = response;
-       setUsers(data);
+        const { data } = response;
+        setUsers(data);
+        axios
+          .get('https://weatherapp-api.azurewebsites.net/api/Role/GetAllRoles')
+          .then((response) => {
+            const { data: rolesData } = response;
+            
+          })
+          .catch((error) => {
+            console.log('An error occurred:', error);
+          });
       })
       .catch((error) => {
-        
+        console.log('An error occurred:', error);
       });
   }, [wStationCtx.currentWeatherStation]);
+  
 
   const toggleModal = () => {
     setModal(!modal);
@@ -271,29 +277,32 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
               />
               {emailIdError && <div className="error">{emailIdError}</div>}
             </FormGroup>
+            
             <FormGroup>
-              <Label for="role">Role</Label>
-              <Dropdown
-                id="role"
-                isOpen={selectedRole !== null}
-                toggle={() => toggleRole()}
-              >
-                <DropdownToggle caret>
-                  {selectedRole ? selectedRole.name : "Select role"}
-                </DropdownToggle>
-                <DropdownMenu>
-                  {roles.map((role) => (
-                    <DropdownItem
-                      key={role.id}
-                      onClick={() => toggleRole(role)}
-                    >
-                      {role.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-              {roleError && <div className="error">{roleError}</div>}
-            </FormGroup>
+  <Label for="role">Role</Label>
+  <Dropdown
+    id="role"
+    isOpen={selectedRole !== null}
+    toggle={() => toggleRole()}
+  >
+    <DropdownToggle caret>
+      {selectedRole ? selectedRole.name : "Select role"}
+    </DropdownToggle>
+    <DropdownMenu>
+      {roles.map((role) => (
+        <DropdownItem
+          key={role.id}
+          onClick={() => toggleRole(role)}
+        >
+          {role.name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {roleError && <div className="error">{roleError}</div>}
+</FormGroup>
+
+
           </Form>
         </ModalBody>
         <ModalFooter className="justify-content-center">
