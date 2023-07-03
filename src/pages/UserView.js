@@ -51,7 +51,7 @@ const UserView=()=> {
   const [roleError, setRoleError] = useState("");
   const [selectedWeatherStationId, setSelectedWeatherStationId] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
-  
+
 
 const authCtx= useContext(AuthContext);
 const wStationCtx = useContext(WeatherStationsContext);
@@ -59,14 +59,15 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
   item => item.weatherStationName === wStationCtx.currentWeatherStation
   )[0].weatherStationID;
 
-  useEffect(() => {
-    if (!wStationCtx.currentWeatherStation) return;
+  function fetchUserData(fetchRolesFlag=false){
+ 
     axios.defaults.withCredentials = true;
     axios
       .get(`https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}`)
       .then((response) => {
         const { data } = response;
         setUsers(data);
+        if (fetchRolesFlag){
         axios
           .get('https://weatherapp-api.azurewebsites.net/api/Role/GetAllRoles')
           .then((response) => {
@@ -76,12 +77,18 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
           .catch((error) => {
             console.log('An error occurred:', error);
           });
-      })
+  }})
       .catch((error) => {
         console.log('An error occurred:', error);
       });
-    }, [wStationCtx.currentWeatherStation]);
     
+    }}
+      
+      useEffect(() => {
+        if (!wStationCtx.currentWeatherStation) return;
+      fetchUserData(true);
+      },[wStationCtx.currentWeatherStation]);
+      
   
 
   const toggleModal = () => {
@@ -155,6 +162,7 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
           setSelectedWeatherStationId("");
           // Closing the modal
           toggleModal();
+          fetchUserData();
         })
         .catch((error) => {
           console.error("Error adding user:", error);
