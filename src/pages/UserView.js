@@ -68,7 +68,7 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
           .get('https://weatherapp-api.azurewebsites.net/api/Role/GetAllRoles')
           .then((response) => {
             const { data: rolesData } = response;
-            
+            setRoles(rolesData); 
           })
           .catch((error) => {
             console.log('An error occurred:', error);
@@ -77,7 +77,8 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
       .catch((error) => {
         console.log('An error occurred:', error);
       });
-  }, [wStationCtx.currentWeatherStation]);
+    }, [wStationCtx.currentWeatherStation]);
+    
   
 
   const toggleModal = () => {
