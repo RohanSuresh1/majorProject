@@ -1,4 +1,19 @@
 import React, { useState } from 'react';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardTitle,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Col,
+  Table,
+} from 'reactstrap';
 
 const ChangePasswordForm = () => {
   const [loggedInUserId] = useState(9); // Placeholder for the logged-in user ID
@@ -70,21 +85,47 @@ const ChangePasswordForm = () => {
   };
 
   return (
-    <form onSubmit={handleChangePassword}>
-      <div>
-        <label>User ID:</label>
-        <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
-      </div>
-      <div>
-        <label>Current Password:</label>
-        <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
-      </div>
-      <div>
-        <label>New Password:</label>
-        <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-      </div>
-      <button type="submit">Change Password</button>
-    </form>
+    <Card>
+      <CardHeader>
+        <CardTitle tag="h4">Change Password</CardTitle>
+      </CardHeader>
+      <CardBody>
+        <Form onSubmit={handleChangePassword}>
+          <FormGroup>
+            <Label for="userId">User ID:</Label>
+            <Input
+              type="text"
+              id="userId"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="currentPassword">Current Password:</Label>
+            <Input
+              type="password"
+              id="currentPassword"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="newPassword">New Password:</Label>
+            <Input
+              type="password"
+              id="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </FormGroup>
+          <Button type="submit" color="primary">Change Password</Button>
+        </Form>
+      </CardBody>
+    
+    </Card>
   );
 };
 

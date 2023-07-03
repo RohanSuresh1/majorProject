@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.3.1";
 import "assets/demo/demo.css";
 import "assets/css/ro.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
