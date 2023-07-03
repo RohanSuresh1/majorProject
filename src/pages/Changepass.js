@@ -1,34 +1,27 @@
-import React, { useState } from 'react';
+import AuthContext from 'contextApi/AuthContext';
+import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Form,
   FormGroup,
   Input,
   Label,
-  Row,
-  Col,
-  Table,
 } from 'reactstrap';
 
 const ChangePasswordForm = () => {
-  const [loggedInUserId] = useState(9); // Placeholder for the logged-in user ID
-  const [userId, setUserId] = useState('');
+  axios.defaults.withCredentials = true;
+  const authCtx = useContext(AuthContext);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const userId = authCtx.loggedUserId;
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
-
-    if (userId !== String(loggedInUserId)) {
-      // User ID does not match the logged-in user
-      console.log('Invalid user ID');
-      return;
-    }
 
     const payload = {
       userId,
@@ -37,32 +30,26 @@ const ChangePasswordForm = () => {
     };
 
     try {
-      const response = await fetch('https://weatherapp-api.azurewebsites.net/api/Auth/ChangePassword', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await axios.post(
+        'https://weatherapp-api.azurewebsites.net/api/Auth/ChangePassword',
+        payload
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         // Password changed successfully
         console.log('Password changed successfully');
 
         // Update the password in the login API
         try {
-          const loginResponse = await fetch('https://weatherapp-api.azurewebsites.net/api/Auth/Login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+          const loginResponse = await axios.post(
+            'https://weatherapp-api.azurewebsites.net/api/Auth/Login',
+            {
               username: userId, // Assuming the username is the same as the user ID
               password: newPassword,
-            }),
-          });
+            }
+          );
 
-          if (loginResponse.ok) {
+          if (loginResponse.status === 200) {
             console.log('Password updated in the login API');
           } else {
             console.log('Failed to update password in the login API');
@@ -72,7 +59,6 @@ const ChangePasswordForm = () => {
         }
 
         // Reset form fields
-        setUserId('');
         setCurrentPassword('');
         setNewPassword('');
       } else {
@@ -91,16 +77,6 @@ const ChangePasswordForm = () => {
       </CardHeader>
       <CardBody>
         <Form onSubmit={handleChangePassword}>
-          <FormGroup>
-            <Label for="userId">User ID:</Label>
-            <Input
-              type="text"
-              id="userId"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              required
-            />
-          </FormGroup>
           <FormGroup>
             <Label for="currentPassword">Current Password:</Label>
             <Input
@@ -121,10 +97,11 @@ const ChangePasswordForm = () => {
               required
             />
           </FormGroup>
-          <Button type="submit" color="primary">Change Password</Button>
+          <Button type="submit" color="primary">
+            Change Password
+          </Button>
         </Form>
       </CardBody>
-    
     </Card>
   );
 };
