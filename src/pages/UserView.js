@@ -82,8 +82,8 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
         console.log('An error occurred:', error);
       });
     
-    }}
-      
+    }
+
       useEffect(() => {
         if (!wStationCtx.currentWeatherStation) return;
       fetchUserData(true);
@@ -177,7 +177,7 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
     setRolesShown(false)
     
   };
-
+  
   return (
     <>
       <div className="content">
