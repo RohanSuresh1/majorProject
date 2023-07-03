@@ -24,9 +24,9 @@ const ChangePasswordForm = () => {
     e.preventDefault();
 
     const payload = {
-      userId,
-      currentPassword,
-      newPassword,
+      UserId: userId,
+      CurrentPassword : currentPassword,
+      NewPassword: newPassword,
     };
 
     try {
@@ -40,23 +40,6 @@ const ChangePasswordForm = () => {
         console.log('Password changed successfully');
 
         // Update the password in the login API
-        try {
-          const loginResponse = await axios.post(
-            'https://weatherapp-api.azurewebsites.net/api/Auth/Login',
-            {
-              username: userId, // Assuming the username is the same as the user ID
-              password: newPassword,
-            }
-          );
-
-          if (loginResponse.status === 200) {
-            console.log('Password updated in the login API');
-          } else {
-            console.log('Failed to update password in the login API');
-          }
-        } catch (error) {
-          console.log('An error occurred while updating password in the login API:', error);
-        }
 
         // Reset form fields
         setCurrentPassword('');

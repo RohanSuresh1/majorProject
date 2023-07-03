@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
-  NavbarBrand,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,

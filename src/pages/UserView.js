@@ -38,9 +38,9 @@ function UserView() {
   const [emailId, setEmailId] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
   const [roles, setRoles] = useState([
-    { id: 1, name: "Super Admin" },
-    { id: 2, name: "Admin" },
-    { id: 3, name: "User" },
+    {  name: "Super Admin" },
+    {  name: "Admin" },
+    {  name: "User" },
   ]);
 
   const [firstNameError, setFirstNameError] = useState("");
@@ -49,6 +49,9 @@ function UserView() {
   const [emailIdError, setEmailIdError] = useState("");
   const [roleError, setRoleError] = useState("");
   const [selectedWeatherStationId, setSelectedWeatherStationId] = useState(1);
+  const [selectedUser, setSelectedUser] = useState(null);
+  
+
 
 
   useEffect(() => {
