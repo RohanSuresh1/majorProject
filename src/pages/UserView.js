@@ -29,16 +29,17 @@ import {
   DropdownItem,
 } from "reactstrap";
 import WeatherStationsContext from "contextApi/WeatherStationsContext";
-
-function UserView() {
+const UserView=()=> {
   const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [emailId, setEmailId] = useState("");
-  const [selectedRole, setSelectedRole] = useState([]);
+  const [selectedRole, setSelectedRole] = useState({});
   const [roles, setRoles] = useState([]);
+  const [rolesShown, setRolesShown] = useState(false);
+  
 
 
   const [firstNameError, setFirstNameError] = useState("");
@@ -150,7 +151,10 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
   };
 
   const toggleRole = (role) => {
+    if(role===undefined) return;
     setSelectedRole((prev) => (prev === role ? null : role));
+    setRolesShown(false)
+    
   };
 
   return (
@@ -283,17 +287,17 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
   <Label for="role">Role</Label>
   <Dropdown
     id="role"
-    isOpen={selectedRole !== null}
+    isOpen={rolesShown}
     toggle={() => toggleRole()}
   >
-    <DropdownToggle caret>
-      {selectedRole ? selectedRole.name : "Select role"}
+    <DropdownToggle onClick={()=>{setRolesShown(true)}} caret>
+      {Object.keys(selectedRole).length>0 ? selectedRole.name : "Select role"}
     </DropdownToggle>
     <DropdownMenu>
       {roles.map((role) => (
         <DropdownItem
-          key={role.id}
-          onClick={() => toggleRole(role)}
+          key={role.roleId}
+          onClick={() => {toggleRole(role)}}
         >
           {role.name}
         </DropdownItem>
