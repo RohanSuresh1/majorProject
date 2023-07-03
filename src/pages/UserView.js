@@ -29,6 +29,8 @@ import {
   DropdownItem,
 } from "reactstrap";
 import WeatherStationsContext from "contextApi/WeatherStationsContext";
+import AuthContext from "contextApi/AuthContext";
+
 const UserView=()=> {
   const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
@@ -51,7 +53,7 @@ const UserView=()=> {
   const [selectedUser, setSelectedUser] = useState(null);
   
 
-
+const authCtx= useContext(AuthContext);
 const wStationCtx = useContext(WeatherStationsContext);
 const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
   item => item.weatherStationName === wStationCtx.currentWeatherStation
@@ -129,24 +131,35 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
 
   const handleAddUser = () => {
     if (validateForm()) {
-     
-      console.log("User Details:", {
+      const roleId = selectedRole.roleId
+      const userData = {
         firstName,
         lastName,
         contactNumber,
         emailId,
-        selectedRole,
-      });
-
-      // Clearing the form fields
-      setFirstName("");
-      setLastName("");
-      setContactNumber("");
-      setEmailId("");
-      setSelectedRole(null);
-
-      // Closing the modal
-      toggleModal();
+        roleId:roleId,
+        weatherStationId:selectedWeatherStationId
+        
+      
+      };
+      axios
+        .post(`https://weatherapp-api.azurewebsites.net/api/User/CreateUser?CreatedBy=${authCtx.loggedUserId}`, userData)
+        .then((response) => {
+          console.log("User added successfully:", response.data);
+          // Clearing the form fields
+          setFirstName("");
+          setLastName("");
+          setContactNumber("");
+          setEmailId("");
+          setSelectedRole({});
+          setSelectedWeatherStationId("");
+          // Closing the modal
+          toggleModal();
+        })
+        .catch((error) => {
+          console.error("Error adding user:", error);
+          // Handle any errors that occur during the request
+        });
     }
   };
 
