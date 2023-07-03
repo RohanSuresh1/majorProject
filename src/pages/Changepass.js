@@ -18,6 +18,7 @@ const ChangePasswordForm = () => {
   const authCtx = useContext(AuthContext);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [message, setMessage] = useState(''); // State for success/error message
   const userId = authCtx.loggedUserId;
 
   const handleChangePassword = async (e) => {
@@ -25,7 +26,7 @@ const ChangePasswordForm = () => {
 
     const payload = {
       UserId: userId,
-      CurrentPassword : currentPassword,
+      CurrentPassword: currentPassword,
       NewPassword: newPassword,
     };
 
@@ -37,19 +38,18 @@ const ChangePasswordForm = () => {
 
       if (response.status === 200) {
         // Password changed successfully
-        console.log('Password changed successfully');
+        setMessage('Password changed successfully'); // Set success message
 
-        // Update the password in the login API
 
         // Reset form fields
         setCurrentPassword('');
         setNewPassword('');
       } else {
         // Handle the error
-        console.log('Password change failed');
+        setMessage('Password change failed'); // Set error message
       }
     } catch (error) {
-      console.log('An error occurred:', error);
+      setMessage('An error occurred'); // Set error message
     }
   };
 
@@ -84,6 +84,7 @@ const ChangePasswordForm = () => {
             Change Password
           </Button>
         </Form>
+        <p>{message}</p> {/* Display success/error message */}
       </CardBody>
     </Card>
   );

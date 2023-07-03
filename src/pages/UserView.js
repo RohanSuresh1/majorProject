@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
   Badge,
@@ -28,6 +28,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import WeatherStationsContext from "contextApi/WeatherStationsContext";
 
 function UserView() {
   const [users, setUsers] = useState([]);
@@ -53,19 +54,23 @@ function UserView() {
   
 
 
+const wStationCtx = useContext(WeatherStationsContext);
+const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
+  item => item.weatherStationName === wStationCtx.currentWeatherStation
+  )[0].weatherStationID;
 
   useEffect(() => {
+    if(!wStationCtx.currentWeatherStation) return;
     axios.defaults.withCredentials = true;
     axios
-      .get("https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=1")
+      .get('https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}')
       .then((response) => {
-        const { data } = response;
-        setUsers(data);
+       
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        
       });
-  }, []);
+  }, [wStationCtx.currentWeatherStation]);
 
   const toggleModal = () => {
     setModal(!modal);
