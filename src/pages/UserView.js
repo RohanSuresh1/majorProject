@@ -63,9 +63,11 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
     if(!wStationCtx.currentWeatherStation) return;
     axios.defaults.withCredentials = true;
     axios
-      .get('https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}')
+      .get(`https://weatherapp-api.azurewebsites.net/api/User/GetAllUsers?weatherStationId=${currentWeatherStationID}`
+      )
       .then((response) => {
-       
+       const {data} = response;
+       setUsers(data);
       })
       .catch((error) => {
         

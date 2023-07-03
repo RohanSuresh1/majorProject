@@ -7,7 +7,7 @@ const WeatherStationsContext = React.createContext({
 
 export const WeatherStationsContextProvider = props => {
     const [currentWeatherStation,setCurrentWeatherStation]= useState('');
-    const [allWeatherStations, setAllWeatherStations] = useState('null');
+    const [allWeatherStations, setAllWeatherStations] = useState(null);
     const contextValue={
         currentWeatherStation:currentWeatherStation,
         setCurrentWeatherStation:setCurrentWeatherStation,

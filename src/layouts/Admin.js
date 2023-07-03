@@ -49,6 +49,7 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
           authCtx.login(user); // Display success message in the console
           setWeatherStationSelected(user.weatherStation?.[0].weatherStationName);
           wStationsCtx.setCurrentWeatherStation(user.weatherStations?.[0].weatherStationName);
+          wStationsCtx.setAllWeatherStations(user.weatherStations);
         
         } else {
           setErrorMessage('Wrong username or password');
