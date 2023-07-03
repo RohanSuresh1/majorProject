@@ -20,7 +20,6 @@ export const AuthContextProvider = props=>{
         setloggedUserId(userDetails.userId)
         localStorage.setItem("WS_UID",userDetails.userId)
         setUserDetails(userDetails)
-
     }
     const contextValue ={
         userDetails:userDetails,

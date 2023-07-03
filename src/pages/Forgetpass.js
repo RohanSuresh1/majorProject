@@ -31,13 +31,21 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div className="popup-container">
-      <div className="popup">
-    
+    <div >
+      <div >
         <form onSubmit={handleSubmit}>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={handleEmailChange} required />
-          <button type="submit">Reset Password</button>
+          {/* <label>Email:</label> */}
+          <Input
+                      placeholder="Email-ID"
+                      type="text"
+                      value={email}
+                      onChange={handleEmailChange} required
+                    />
+          {/* <input type="email" value={email} onChange={handleEmailChange} required /> */}
+          <Button block className="btn-round mb-3" color="warning" type="submit">
+                    Reset Password
+            </Button>
+          {/* <button type="submit">Reset Password</button> */}
         </form>
       </div>
     </div>

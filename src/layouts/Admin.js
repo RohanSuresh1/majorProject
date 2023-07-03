@@ -1,19 +1,4 @@
-/*!
 
-=========================================================
-* Paper Dashboard PRO React - v1.3.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import { useEffect,useContext,useState } from "react";
 import React from "react";
 // javascript plugin used to create scrollbars on windows
@@ -47,8 +32,11 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
   const [errorMessage, setErrorMessage] = useState('');
   const authCtx = useContext(AuthContext);
   const wStationsCtx= useContext(WeatherStationsContext);
-  const weatherDropdownOptions=authCtx.userDetails?.weatherStations?.map(item=>{   
-  })
+  const weatherDropdownOptions = authCtx.userDetails?.weatherStations?.map(item =>[
+    item.weatherStationID,
+    item.weatherStationName
+  ])
+   
 //console.log(weatherDropdownOptions)
   useEffect(()=>{
     axios.defaults.withCredentials = true;
@@ -104,8 +92,10 @@ const [weatherStationSelected,setWeatherStationSelected]=useState("")
       console.log(prop)
       if (prop.layout === "/admin") {
         return (
-          <Route path={prop.path}  element={() => <prop.component weatherStationSelected={weatherStationSelected} />}  key={key} exact />
-          //<Route path={prop.path} element={prop.component} weatherStationSelected={weatherStationSelected} key={key} exact />
+          // <Route path={prop.path}  
+          // element={() => <prop.component weatherStationSelected={weatherStationSelected} />}  
+          // key={key} exact />
+          <Route path={prop.path} element={prop.component} weatherStationSelected={weatherStationSelected} key={key} exact />
       
         );
       } else {

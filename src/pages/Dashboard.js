@@ -41,7 +41,7 @@ const Dashboard=(props)=> {
   const [errorMessage, setErrorMessage] = useState('');
   const authCtx = useContext(AuthContext);
   const wStationCtx=useContext(WeatherStationsContext);
-  console.log(authCtx);
+  console.log(wStationCtx.currentWeatherStation);
   
   return (
   

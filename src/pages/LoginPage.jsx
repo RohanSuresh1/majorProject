@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Button,
@@ -21,6 +21,8 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import ForgetPassword from "./Forgetpass";
+import AuthContext from "contextApi/AuthContext";
+//import 'assets/css/ro.css'
 
 const LoginPage = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -28,6 +30,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const authCtx=useContext(AuthContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -41,6 +44,7 @@ const LoginPage = () => {
         const user = response.data;
         if (user) {
           console.log("Login successful");
+          authCtx.login(user);
           navigate("/admin/dashboard");
         } else {
           setErrorMessage("Wrong username or password");
@@ -140,16 +144,24 @@ const LoginPage = () => {
         </Row>
       </Container>
       <Modal isOpen={showForgotPassword} toggle={toggleForgotPassword}>
-        <ModalHeader toggle={toggleForgotPassword}>Forgot Password</ModalHeader>
-        <ModalBody>
-          <ForgetPassword />
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={toggleForgotPassword}>
-            Close
-          </Button>
-        </ModalFooter>
-      </Modal>
+    <div className="modal-content">
+      <ModalHeader toggle={toggleForgotPassword}>
+        Forgot Password
+      </ModalHeader>
+      <ModalBody>
+        <ForgetPassword />
+      </ModalBody>
+      <ModalFooter className="justify-content-center">
+  <Button color="secondary" onClick={toggleForgotPassword}>
+    Close
+  </Button>
+</ModalFooter>
+
+    </div>
+
+</Modal>
+
+
     </div>
   );
 };
