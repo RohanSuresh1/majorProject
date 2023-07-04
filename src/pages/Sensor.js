@@ -1,78 +1,86 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
+import React, { useEffect, useState,useContext } from 'react';
+import axios from 'axios';
 import {
-  Button,
-  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
-  Label,
-  FormGroup,
-  Input,
   Table,
+  Button,
   Row,
   Col,
-  UncontrolledTooltip,
-} from "reactstrap";
+} from 'reactstrap';
+import WeatherStationsContext from "contextApi/WeatherStationsContext";
+import AuthContext from "contextApi/AuthContext";
 
-function Sensor() {
+const SensorTable = () => {
+  const [sensorData, setSensorData] = useState([]);
+
+  const authCtx= useContext(AuthContext);
+  const wStationCtx = useContext(WeatherStationsContext);
+  const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
+    item => item.weatherStationName === wStationCtx.currentWeatherStation
+    )[0].weatherStationID;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://weatherapp-api.azurewebsites.net/api/Sensor/GetSensorsByWeatherStationId?weatherStationId=${currentWeatherStationID}`);
+        setSensorData(response.data);
+      } catch (error) {
+        console.error('Error fetching sensor data:', error);
+      }
+    };
+
+    fetchData();
+  }, [wStationCtx.currentWeatherStation]);
+
+  const handleUpdate = (sensorId) => {
+    // Perform the update operation for the specific sensor
+    console.log(`Updating sensor with ID: ${sensorId}`);
+  };
+
   return (
-    <>
-      <div className="content">
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Sensor Table</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <Table responsive>
-                  <thead className="text-primary">
-                    <tr>
-                   
-                      <th>Sensor Name</th>
-                      <th className="text-center">Unit Value</th>
-                      <th className="text-center">Maximum Value</th>
-                      <th className="text-center">Minimum Value</th>
-                     
+    <div>
+      <Row>
+        <Col>
+          <Card>
+            <CardHeader>
+              <CardTitle tag="h4">Sensor Data</CardTitle>
+            </CardHeader>
+            <CardBody>
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th className="text-center">Unit</th>
+                    <th className="text-center">Max Threshold</th>
+                    <th className="text-center">Min Threshold</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sensorData.map((sensor, index) => (
+                    <tr key={index}>
+                      <td>{sensor.name}</td>
+                      <td className="text-center">{sensor.units}</td>
+                      <td className="text-center">{sensor.maxThreshold}</td>
+                      <td className="text-center">{sensor.minThreshold}</td>
+                      <td>
+                        <Button color="primary" onClick={() => handleUpdate(sensor.senorTypeId)}>
+                          Update
+                        </Button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                     
-                      <td>Temperature Sensor</td>
-                      <td className="text-center">23</td>
-                      <td className="text-center">40</td>
-                      <td className="text-center">18</td>
-                      
-                    </tr>
-            </tbody>      
-          </Table>
-          </CardBody>
+                  ))}
+                </tbody>
+              </Table>
+            </CardBody>
           </Card>
-          </Col>
-        </Row>
-      </div>
-    </>
+        </Col>
+      </Row>
+    </div>
   );
-}
+};
 
-export default Sensor ;
+export default SensorTable;
