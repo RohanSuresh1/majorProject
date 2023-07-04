@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
-  Badge,
   Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Label,
   FormGroup,
   Form,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Table,
   Row,
   Col,
@@ -50,8 +45,6 @@ const UserView=()=> {
   const [emailIdError, setEmailIdError] = useState("");
   const [roleError, setRoleError] = useState("");
   const [selectedWeatherStationId, setSelectedWeatherStationId] = useState(1);
-  const [selectedUser, setSelectedUser] = useState(null);
-
 
 const authCtx= useContext(AuthContext);
 const wStationCtx = useContext(WeatherStationsContext);
@@ -119,7 +112,7 @@ const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
       setContactNumberError("");
     }
 
-    if (!emailId.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+    if (!emailId.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
       setEmailIdError("Invalid email address");
       isValid = false;
     } else {

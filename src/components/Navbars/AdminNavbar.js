@@ -21,7 +21,7 @@ const AdminNavbar=(props)=> {
     wStationCtx.setCurrentWeatherStation(option[1])
   };
 useEffect(()=>{
-  if(options?.length>0)
+  if (selectedOption == null) if(options?.length>0)
   setSelectedOption(options[0][1])
 },[options])
   return (

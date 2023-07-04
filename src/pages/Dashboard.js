@@ -1,7 +1,6 @@
-import React, { useState,useEffect } from 'react';
+
 import AuthContext from 'contextApi/AuthContext';
 import {useContext } from 'react';
-import axios from 'axios';
 import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Badge,
@@ -11,17 +10,8 @@ import {
   CardBody,
   CardFooter,
   CardTitle,
-  Label,
-  FormGroup,
-  Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Table,
   Row,
   Col,
-  UncontrolledTooltip,
 } from "reactstrap";
 import {
   chartExample1,
@@ -38,7 +28,6 @@ import WeatherStationsContext from 'contextApi/WeatherStationsContext';
 
 const Dashboard=(props)=> {
   console.log(props)
-  const [errorMessage, setErrorMessage] = useState('');
   const authCtx = useContext(AuthContext);
   const wStationCtx=useContext(WeatherStationsContext);
   console.log(wStationCtx.currentWeatherStation);
@@ -103,43 +92,6 @@ const Dashboard=(props)=> {
                     data={chartExample4.data}
                     options={chartExample4.options}
                   />
-                    {/* <Form>
-                <InputGroup className="no-border">
-                  <Input defaultValue="" placeholder="Search..." type="text" />
-                  <InputGroupAddon addonType="append">
-                    <InputGroupText>
-                      <i className="nc-icon nc-zoom-split" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                </InputGroup>
-              </Form> */}
-                    {/* <VectorMap
-                        map={"world_mill"}
-                        backgroundColor="transparent"
-                        zoomOnScroll={false}
-                        containerStyle={{
-                          height: "300px",
-                        }}
-                        containerClassName="map"
-                        regionStyle={{
-                          initial: {
-                            fill: "#e4e4e4",
-                            "fill-opacity": 0.9,
-                            stroke: "none",
-                            "stroke-width": 0,
-                            "stroke-opacity": 0,
-                          },
-                        }}
-                        series={{
-                          regions: [
-                            {
-                              values: mapData,
-                              scale: ["#AAAAAA", "#444444"],
-                              normalizeFunction: "polynomial",
-                            },
-                          ],
-                        }}
-                      /> */}
                   </Col>
                 </CardBody>
               </Card>
@@ -362,277 +314,6 @@ const Dashboard=(props)=> {
                       </div>
                     </Col>
                   </Row>
-                </CardFooter>
-              </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col md="6">
-              <Card className="card-tasks">
-                <CardHeader>
-                  <CardTitle tag="h4">Tasks</CardTitle>
-                  <h5 className="card-category">Backend development</h5>
-                </CardHeader>
-                <CardBody>
-                  <div className="table-full-width table-responsive">
-                    <Table>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox" />
-                                <span className="form-check-sign" />
-                              </Label>
-                            </FormGroup>
-                          </td>
-                          <td className="img-row">
-                            <div className="img-wrapper">
-                              <img
-                                alt="..."
-                                className="img-raised"
-                                src={require("assets/img/faces/ayo-ogunseinde-2.jpg")}
-                              />
-                            </div>
-                          </td>
-                          <td className="text-left">
-                            Sign contract for "What are conference organizers
-                            afraid of?"
-                          </td>
-                          <td className="td-actions text-right">
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="info"
-                              id="tooltip42906017"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-ruler-pencil" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip42906017"
-                            >
-                              Edit Task
-                            </UncontrolledTooltip>
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="danger"
-                              id="tooltip570363224"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-simple-remove" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip570363224"
-                            >
-                              Remove
-                            </UncontrolledTooltip>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox" />
-                                <span className="form-check-sign" />
-                              </Label>
-                            </FormGroup>
-                          </td>
-                          <td className="img-row">
-                            <div className="img-wrapper">
-                              <img
-                                alt="..."
-                                className="img-raised"
-                                src={require("assets/img/faces/erik-lucatero-2.jpg")}
-                              />
-                            </div>
-                          </td>
-                          <td className="text-left">
-                            Lines From Great Russian Literature? Or E-mails From
-                            My Boss?
-                          </td>
-                          <td className="td-actions text-right">
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="info"
-                              id="tooltip584875601"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-ruler-pencil" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip584875601"
-                            >
-                              Edit Task
-                            </UncontrolledTooltip>
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="danger"
-                              id="tooltip517629613"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-simple-remove" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip517629613"
-                            >
-                              Remove
-                            </UncontrolledTooltip>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox" />
-                                <span className="form-check-sign" />
-                              </Label>
-                            </FormGroup>
-                          </td>
-                          <td className="img-row">
-                            <div className="img-wrapper">
-                              <img
-                                alt="..."
-                                className="img-raised"
-                                src={require("assets/img/faces/kaci-baum-2.jpg")}
-                              />
-                            </div>
-                          </td>
-                          <td className="text-left">
-                            Using dummy content or fake information in the Web
-                            design process can result in products with unrealistic
-                          </td>
-                          <td className="td-actions text-right">
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="info"
-                              id="tooltip792337830"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-ruler-pencil" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip792337830"
-                            >
-                              Edit Task
-                            </UncontrolledTooltip>
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="danger"
-                              id="tooltip731952378"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-simple-remove" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip731952378"
-                            >
-                              Remove
-                            </UncontrolledTooltip>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox" />
-                                <span className="form-check-sign" />
-                              </Label>
-                            </FormGroup>
-                          </td>
-                          <td className="img-row">
-                            <div className="img-wrapper">
-                              <img
-                                alt="..."
-                                className="img-raised"
-                                src={require("assets/img/faces/joe-gardner-2.jpg")}
-                              />
-                            </div>
-                          </td>
-                          <td className="text-left">
-                            But I must explain to you how all this mistaken idea
-                            of denouncing pleasure
-                          </td>
-                          <td className="td-actions text-right">
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="info"
-                              id="tooltip825783733"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-ruler-pencil" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip825783733"
-                            >
-                              Edit Task
-                            </UncontrolledTooltip>
-                            <Button
-                              className="btn-round btn-icon btn-icon-mini btn-neutral"
-                              color="danger"
-                              id="tooltip285089652"
-                              title=""
-                              type="button"
-                            >
-                              <i className="nc-icon nc-simple-remove" />
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              target="tooltip285089652"
-                            >
-                              Remove
-                            </UncontrolledTooltip>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </div>
-                </CardBody>
-                <CardFooter>
-                  <hr />
-                  <div className="stats">
-                    <i className="fa fa-refresh spin" />
-                    Updated 3 minutes ago
-                  </div>
-                </CardFooter>
-              </Card>
-            </Col>
-            <Col md="6">
-              <Card>
-                <CardHeader>
-                  <CardTitle tag="h4">2021 Sales</CardTitle>
-                  <p className="card-category">All products including Taxes</p>
-                </CardHeader>
-                <CardBody>
-                  <Bar
-                    data={chartExample4.data}
-                    options={chartExample4.options}
-                  />
-                </CardBody>
-                <CardFooter>
-                  <div className="legend">
-                    <i className="fa fa-circle text-info" />
-                    Tesla Model S <i className="fa fa-circle text-danger" />
-                    BMW 5 Series
-                  </div>
-                  <hr />
-                  <div className="stats">
-                    <i className="fa fa-check" />
-                    Data information certified
-                  </div>
                 </CardFooter>
               </Card>
             </Col>
