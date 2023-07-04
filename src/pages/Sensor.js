@@ -59,7 +59,7 @@ const SensorTable = () => {
               ? Updatedsensor.newMinThreshold  
               : Updatedsensor.minThreshold
             
-            }&loggedUserId=${authCtx.AuthContext}`
+            }&userId=${authCtx.loggedUserId}`
         );
   
         console.log('Sensor thresholds updated:', response.data);
