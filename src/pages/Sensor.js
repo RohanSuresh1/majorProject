@@ -23,7 +23,7 @@ const SensorTable = () => {
   const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
     item => item.weatherStationName === wStationCtx.currentWeatherStation
   )[0].weatherStationID;
-
+  axios.defaults.withCredentials = true;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,10 +48,18 @@ const SensorTable = () => {
       try {
         // Make the API call to update the sensor thresholds
         const response = await axios.post(
-          `https://weatherapp-api.azurewebsites.net/api/Sensor/UpdateSensorThresholds?sensorConfigId=${Updatedsensor.sensorConfigId}
-          &weatherStationId=${currentWeatherStationID}&maxThreshold=$
-          {Updatedsensor.newMaxThreshold}&minThreshold=${Updatedsensor.newMinThreshold}
-          &userId=${authCtx.userId}`
+          `https://weatherapp-api.azurewebsites.net/api/Sensor/UpdateSensorThresholds?sensorConfigId=${
+            Updatedsensor.sensorConfigId}
+            &weatherStationId=${currentWeatherStationID}&maxThreshold=${
+              Updatedsensor.newMaxThreshold
+              ? Updatedsensor.newMaxThreshold  
+              : Updatedsensor.maxThreshold
+            }&minThreshold=${
+              Updatedsensor.newMinThreshold
+              ? Updatedsensor.newMinThreshold  
+              : Updatedsensor.minThreshold
+            
+            }&loggedUserId=${authCtx.AuthContext}`
         );
   
         console.log('Sensor thresholds updated:', response.data);
