@@ -42,15 +42,15 @@ const SensorTable = () => {
  
   const handleUpdate = async (sensorId) => {
     // Get the updated sensor data by filtering the sensorData array
-    const updatedSensor = sensorData.find((sensor) => sensor.sensorTypeId === sensorId);
+    const Updatedsensor = sensorData.find((sensor) => sensor.sensorConfigId === sensorId);
   
-    if (updatedSensor) {
+    if (Updatedsensor) {
       try {
         // Make the API call to update the sensor thresholds
         const response = await axios.post(
-          `https://weatherapp-api.azurewebsites.net/api/Sensor/UpdateSensorThresholds?sensorConfigID=${updatedSensor.sensorTypeId}
+          `https://weatherapp-api.azurewebsites.net/api/Sensor/UpdateSensorThresholds?sensorConfigId=${Updatedsensor.sensorConfigId}
           &weatherStationId=${currentWeatherStationID}&maxThreshold=$
-          {updatedSensor.newMaxThreshold}&minThreshold=${updatedSensor.newMinThreshold}
+          {Updatedsensor.newMaxThreshold}&minThreshold=${Updatedsensor.newMinThreshold}
           &userId=${authCtx.userId}`
         );
   
@@ -144,7 +144,7 @@ const SensorTable = () => {
                               ? 'enabled'
                               : 'disabled'
                           }`}
-                          onClick={() => handleUpdate(sensor.sensorTypeId)}
+                          onClick={() => handleUpdate(sensor.sensorConfigId)}
                         >
                           Update
                         </Button>{' '}
