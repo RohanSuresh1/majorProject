@@ -169,43 +169,47 @@ const UserView = () => {
   const handleDeleteUser = (userId) => {
     console.log(userId.userId);
     axios
-        .post(
-          `https://weatherapp-api.azurewebsites.net/api/User/DeleteUser?ModifiedBy=${authCtx.loggedUserId}&userId=${userId.userId}`
-        )
-        .then((response) => {
-          console.log("User Deleted successfully:", response.data);
-          fetchUserData();
-        })
-        .catch((error) => {
-          console.error("Error updating user:", error);
-          // Handle any errors that occur during the request
-        });
+      .post(
+        `https://weatherapp-api.azurewebsites.net/api/User/DeleteUser?ModifiedBy=${authCtx.loggedUserId}&userId=${userId.userId}`
+      )
+      .then((response) => {
+        console.log("User Deleted successfully:", response.data);
+        fetchUserData();
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+        // Handle any errors that occur during the request
+      });
   }
   const handleEditUser = () => {
-      axios
-        .post(
-          `https://weatherapp-api.azurewebsites.net/api/User/UpdateUser?ModifiedBy=${authCtx.loggedUserId}`,
-          editUserDetails
-        )
-        .then((response) => {
-          console.log("User updated successfully:", response.data);
-          // Clearing the form fields
-          setFirstName('');
-          setLastName('');
-          setContactNumber('');
-          setEmailId('');
-          setSelectedRole({});
-          setSelectedWeatherStationId('');
-          // Closing the modal
-          toggleModalEdit();
-          fetchUserData();
-        })
-        .catch((error) => {
-          console.error("Error updating user:", error);
-          // Handle any errors that occur during the request
-        });
+    const UserDetailsToSend = { ...editUserDetails };
+    UserDetailsToSend.roleId = roles.filter(
+      role => role.name === UserDetailsToSend.roleName
+    )[0].roleId;
+    axios
+      .post(
+        `https://weatherapp-api.azurewebsites.net/api/User/UpdateUser?ModifiedBy=${authCtx.loggedUserId}`,
+        UserDetailsToSend
+      )
+      .then((response) => {
+        console.log("User updated successfully:", response.data);
+        // Clearing the form fields
+        setFirstName('');
+        setLastName('');
+        setContactNumber('');
+        setEmailId('');
+        setSelectedRole({});
+        setSelectedWeatherStationId('');
+        // Closing the modal
+        toggleModalEdit();
+        fetchUserData();
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+        // Handle any errors that occur during the request
+      });
   };
-  
+
   const toggleRole = role => {
     if (role === undefined) return;
     setSelectedRole(prev => (prev === role ? null : role));
@@ -227,9 +231,13 @@ const UserView = () => {
               <CardHeader>
                 <div className='d-flex justify-content-between'>
                   <CardTitle tag='h4'>User Table</CardTitle>
+                  {(authCtx.userDetails.roleCode === 'SUPER_ADMIN' ||
+                            authCtx.userDetails.roleCode === 'ADMIN') && (
+                              <>
                   <Button color='primary' onClick={toggleModal}>
                     Add User
                   </Button>
+                  </>)}
                 </div>
               </CardHeader>
               <CardBody>
@@ -253,49 +261,49 @@ const UserView = () => {
                         <td className='text-right'>
                           {(authCtx.userDetails.roleCode === 'SUPER_ADMIN' ||
                             authCtx.userDetails.roleCode === 'ADMIN') && (
-                            <>
-                              <Button
-                                className='btn-icon'
-                                color='success'
-                                id={`tooltipEdit${user.userId}`}
-                                size='sm'
-                                type='button'
-                                onClick={() => {
-                                  setEditUserDetails({
-                                    firstName: user.firstName,
-                                    lastName: user.lastName,
-                                    contactNumber: user.contactNumber,
-                                    emailId: user.emailId,
-                                    roleName: user.roleName,
-                                    userId : user.userId
-                                  });
-                                  toggleModalEdit();
-                                }}
-                              >
-                                <i className='fa fa-edit' />
-                              </Button>{' '}
-                              <UncontrolledTooltip delay={0} target={`tooltipEdit${user.userId}`}>
-                                Edit
-                              </UncontrolledTooltip>
-                              <Button
-                                className='btn-icon'
-                                color='danger'
-                                id={`tooltipDelete${user.userId}`}
-                                size='sm'
-                                type='button'
-                                onClick={() => {
-                                  handleDeleteUser({
-                                    userId : user.userId
-                                  });
-                                }}
-                              >
-                                <i className='fa fa-times' />
-                              </Button>{' '}
-                              <UncontrolledTooltip delay={0} target={`tooltipDelete${user.userId}`}>
-                                Delete
-                              </UncontrolledTooltip>
-                            </>
-                          )}
+                              <>
+                                <Button
+                                  className='btn-icon'
+                                  color='success'
+                                  id={`tooltipEdit${user.userId}`}
+                                  size='sm'
+                                  type='button'
+                                  onClick={() => {
+                                    setEditUserDetails({
+                                      firstName: user.firstName,
+                                      lastName: user.lastName,
+                                      contactNumber: user.contactNumber,
+                                      emailId: user.emailId,
+                                      roleName: user.roleName,
+                                      userId: user.userId
+                                    });
+                                    toggleModalEdit();
+                                  }}
+                                >
+                                  <i className='fa fa-edit' />
+                                </Button>{' '}
+                                <UncontrolledTooltip delay={0} target={`tooltipEdit${user.userId}`}>
+                                  Edit
+                                </UncontrolledTooltip>
+                                <Button
+                                  className='btn-icon'
+                                  color='danger'
+                                  id={`tooltipDelete${user.userId}`}
+                                  size='sm'
+                                  type='button'
+                                  onClick={() => {
+                                    handleDeleteUser({
+                                      userId: user.userId
+                                    });
+                                  }}
+                                >
+                                  <i className='fa fa-times' />
+                                </Button>{' '}
+                                <UncontrolledTooltip delay={0} target={`tooltipDelete${user.userId}`}>
+                                  Delete
+                                </UncontrolledTooltip>
+                              </>
+                            )}
                         </td>
                       </tr>
                     ))}
@@ -308,92 +316,101 @@ const UserView = () => {
       </div>
 
       {/* Add User Modal */}
-      <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Add User</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for='firstName'>First Name</Label>
-              <Input
-                type='text'
-                id='firstName'
-                placeholder='Enter first name'
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-              />
-              {firstNameError && <div className='error'>{firstNameError}</div>}
-            </FormGroup>
-            <FormGroup>
-              <Label for='lastName'>Last Name</Label>
-              <Input
-                type='text'
-                id='lastName'
-                placeholder='Enter last name'
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-              />
-              {lastNameError && <div className='error'>{lastNameError}</div>}
-            </FormGroup>
-            <FormGroup>
-              <Label for='contactNumber'>Contact Number</Label>
-              <Input
-                type='text'
-                id='contactNumber'
-                placeholder='Enter contact number'
-                value={contactNumber}
-                onChange={e => setContactNumber(e.target.value)}
-              />
-              {contactNumberError && <div className='error'>{contactNumberError}</div>}
-            </FormGroup>
-            <FormGroup>
-              <Label for='emailId'>Email ID</Label>
-              <Input
-                type='email'
-                id='emailId'
-                placeholder='Enter email ID'
-                value={emailId}
-                onChange={e => setEmailId(e.target.value)}
-              />
-              {emailIdError && <div className='error'>{emailIdError}</div>}
-            </FormGroup>
+      {(authCtx.userDetails.roleCode === 'SUPER_ADMIN' ||
+        authCtx.userDetails.roleCode === 'ADMIN') && (
+          <>
+            <Modal isOpen={modal} toggle={toggleModal}>
+              <ModalHeader toggle={toggleModal}>Add User</ModalHeader>
+              <ModalBody>
+                <Form>
+                  <FormGroup>
+                    <Label for='firstName'>First Name</Label>
+                    <Input
+                      type='text'
+                      id='firstName'
+                      placeholder='Enter first name'
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                    />
+                    {firstNameError && <div className='error'>{firstNameError}</div>}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for='lastName'>Last Name</Label>
+                    <Input
+                      type='text'
+                      id='lastName'
+                      placeholder='Enter last name'
+                      value={lastName}
+                      onChange={e => setLastName(e.target.value)}
+                    />
+                    {lastNameError && <div className='error'>{lastNameError}</div>}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for='contactNumber'>Contact Number</Label>
+                    <Input
+                      type='text'
+                      id='contactNumber'
+                      placeholder='Enter contact number'
+                      value={contactNumber}
+                      onChange={e => setContactNumber(e.target.value)}
+                    />
+                    {contactNumberError && <div className='error'>{contactNumberError}</div>}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for='emailId'>Email ID</Label>
+                    <Input
+                      type='email'
+                      id='emailId'
+                      placeholder='Enter email ID'
+                      value={emailId}
+                      onChange={e => setEmailId(e.target.value)}
+                    />
+                    {emailIdError && <div className='error'>{emailIdError}</div>}
+                  </FormGroup>
 
-            <FormGroup>
-              <Label for='role'>Role</Label>
-              <Dropdown id='role' isOpen={rolesShown} toggle={() => toggleRole()}>
-                <DropdownToggle
-                  onClick={() => {
-                    setRolesShown(true);
-                  }}
-                  caret
-                >
-                  {Object.keys(selectedRole).length > 0 ? selectedRole.name : 'Select role'}
-                </DropdownToggle>
-                <DropdownMenu>
-                  {roles.map(role => (
-                    <DropdownItem
-                      key={role.roleId}
-                      onClick={() => {
-                        toggleRole(role);
-                      }}
-                    >
-                      {role.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-              {roleError && <div className='error'>{roleError}</div>}
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter className='justify-content-center'>
-          <Button color='primary' onClick={handleAddUser}>
-            Add
-          </Button>{' '}
-          <Button color='secondary' onClick={toggleModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+                  <FormGroup>
+                    <Label for='role'>Role</Label>
+                    <Dropdown id='role' isOpen={rolesShown} toggle={() => toggleRole()}>
+                      <DropdownToggle
+                        onClick={() => {
+                          setRolesShown(true);
+                        }}
+                        caret
+                      >
+                        {Object.keys(selectedRole).length > 0 ? selectedRole.name : 'Select role'}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        {roles.map(role => (
+                          <DropdownItem
+                            key={role.roleId}
+                            onClick={() => {
+                              toggleRole(role);
+                            }}
+                          >
+                            {role.name}
+                          </DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                    {roleError && <div className='error'>{roleError}</div>}
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+              <ModalFooter className='justify-content-center'>
+                <Button color='primary' onClick={handleAddUser}>
+                  Add
+                </Button>{' '}
+                <Button color='secondary' onClick={toggleModal}>
+                  Cancel
+                </Button>
+
+              </ModalFooter>
+
+            </Modal>
+          </>
+        )}
+
+
 
       {/* Edit User Modal */}
       <Modal isOpen={modalEdit} toggle={toggleModalEdit}>

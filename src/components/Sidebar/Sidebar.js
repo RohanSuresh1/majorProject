@@ -187,28 +187,16 @@ const Sidebar=(props)=> {
                 <b className="caret" />
               </span>
             </a>
-            <Collapse isOpen={openAvatar}>
+            {/* <Collapse isOpen={openAvatar}>
               <ul className="nav">
                 <li>
                   <Link to="/admin/user-profile">
-                    <span className="sidebar-mini-icon">MP</span>
-                    <span className="sidebar-normal">My Profile</span>
+                    <span className="sidebar-mini-icon">LG</span>
+                    <button>Logout</button>
                   </Link>
                 </li>
-                {/* <li>
-                  <Link to="/admin/user-profile">
-                    <span className="sidebar-mini-icon">EP</span>
-                    <span className="sidebar-normal">Edit Profile</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/admin/user-profile">
-                    <span className="sidebar-mini-icon">S</span>
-                    <span className="sidebar-normal">Settings</span>
-                  </Link>
-                </li> */}
               </ul>
-            </Collapse>
+            </Collapse> */}
           </div>
         </div>
         <Nav>{createLinks(props.routes)}</Nav>
