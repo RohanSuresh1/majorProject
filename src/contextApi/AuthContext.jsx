@@ -28,6 +28,7 @@ export const AuthContextProvider = props=>{
         loggedUserId:loggedUserId,
         logout: () => {}
     }
+    
 
     return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
 }

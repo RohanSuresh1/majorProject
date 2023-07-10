@@ -37,8 +37,6 @@ const AdminNavbar = (props) => {
       .then((response) => {
         if (response.status === 200) {
           // Logout successful
-          // Clear all cookies
-          Cookies.remove(); // Clear all cookies
           // Redirect to the login page
           navigate("/");
         } else {

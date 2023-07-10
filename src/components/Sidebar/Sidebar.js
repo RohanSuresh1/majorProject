@@ -184,7 +184,7 @@ const Sidebar=(props)=> {
             >
               <span>
                 Rohan
-                <b className="caret" />
+                
               </span>
             </a>
             {/* <Collapse isOpen={openAvatar}>
