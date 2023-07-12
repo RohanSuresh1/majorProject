@@ -11,6 +11,8 @@ import {
   FormGroup,
   Input,
   Label,
+  Row,
+  Col
 } from 'reactstrap';
 
 const ChangePasswordForm = () => {
@@ -54,6 +56,9 @@ const ChangePasswordForm = () => {
   };
 
   return (
+  <div className='content'>
+  <Row>
+    <Col>
     <Card>
       <CardHeader>
         <CardTitle tag="h4">Change Password</CardTitle>
@@ -87,6 +92,9 @@ const ChangePasswordForm = () => {
         <p>{message}</p> {/* Display success/error message */}
       </CardBody>
     </Card>
+    </Col>
+    </Row>
+    </div>
   );
 };
 

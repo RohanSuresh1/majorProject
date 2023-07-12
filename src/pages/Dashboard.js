@@ -25,7 +25,7 @@ import {
 import DonutChart from 'charts/DonutChart';
 import { LineChart_TrendAnalysis } from 'charts/LineChat';
 import WeatherStationsContext from 'contextApi/WeatherStationsContext';
-import LoadingIcon from "assets/img/extra/loading.gif";
+import LoadingIcon from 'assets/img/extra/loading.gif';
 
 function formatTitle(title) {
   title = title.replace(/([A-Z])/g, ' $1');
@@ -87,16 +87,21 @@ const Dashboard = props => {
   const currentWeatherStation = wStationCtx.allWeatherStations?.find(
     station => station.weatherStationName === wStationCtx.currentWeatherStation
   );
-  const wsData = wStationCtx?.allWeatherStationData?.filter(
+  const wsData =
+    wStationCtx.viewType === 'LIVE'
+      ? wStationCtx?.allWeatherStationData?.filter(
+          data => data.WeatherStationId === currentWeatherStation?.weatherStationID
+        )
+      : wStationCtx?.historicData?.filter(
+          data => data.WeatherStationId === currentWeatherStation?.weatherStationID
+        );
+  const keysToIgnore = ['WeatherStationId', 'WeatherStationCode', 'Pressure', 'TimeStamp'];
+  const lastData = wStationCtx?.allWeatherStationData?.filter(
     data => data.WeatherStationId === currentWeatherStation?.weatherStationID
   );
-  console.log(wsData);
-
-  const keysToIgnore = ['WeatherStationId', 'WeatherStationCode', 'Pressure', 'TimeStamp'];
-
   const currentData =
-    wsData.length > 0
-      ? wsData.at(-1)
+    lastData.length > 0
+      ? lastData.at(-1)
       : {
           WeatherStationId: null,
           WeatherStationCode: null,
@@ -105,14 +110,17 @@ const Dashboard = props => {
           Pressure: null,
           AirQuality: null
         };
-  const consolidatedStreamingData = [...wsData];
+  const consolidatedStreamingData = wsData ? [...wsData] : [];
   const chartDataSets = {},
     labels = [],
     variationData = {};
 
   consolidatedStreamingData?.map(item => {
     Object.keys(item).map(objKey => {
-      if (objKey === 'TimeStamp') labels.push(item[[objKey]].substring(11, 16));
+      if (objKey === 'TimeStamp')
+        labels.push(
+          wStationCtx.viewType === 'LIVE' ? item[[objKey]].substring(11, 16) : item[[objKey]]
+        );
       if (keysToIgnore.indexOf(objKey) >= 0) return;
       const { metric, color } = getDataSetProperty(objKey);
       if (Object.keys(chartDataSets).indexOf(objKey) < 0)
@@ -139,12 +147,18 @@ const Dashboard = props => {
           barPercentage: 0.4,
           data: []
         };
-      if (labels.length >= 1) {
+      console.log(chartDataSets);
+      console.log(objKey);
+      if (
+        (labels.length >= 1 && wStationCtx.viewType === 'LIVE') ||
+        (labels.length > 1 && wStationCtx.viewType === 'HISTORIC')
+      ) {
         let deviation = chartDataSets[[objKey]].data.at(-1) - chartDataSets[[objKey]].data.at(-2);
         variationData[[objKey]].data.push(deviation);
       }
     });
   });
+  console.log(variationData);
   const chartData = {
     labels: labels.slice(1, labels.length),
     datasets: Object.keys(variationData).map(keyObj => variationData[[keyObj]])
@@ -226,8 +240,7 @@ const Dashboard = props => {
         </Col>
       </Row>
     </div>
-
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
