@@ -12,7 +12,8 @@ import {
   Input,
   Label,
   Row,
-  Col
+  Col,
+  Alert
 } from 'reactstrap';
 
 const ChangePasswordForm = () => {
@@ -20,7 +21,8 @@ const ChangePasswordForm = () => {
   const authCtx = useContext(AuthContext);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [message, setMessage] = useState(''); // State for success/error message
+  const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false); // New state for success status
   const userId = authCtx.loggedUserId;
 
   const handleChangePassword = async (e) => {
@@ -39,61 +41,63 @@ const ChangePasswordForm = () => {
       );
 
       if (response.status === 200) {
-        // Password changed successfully
-        setMessage('Password changed successfully'); // Set success message
-
-
-        // Reset form fields
+        setIsSuccess(true); // Set success status
+        setMessage('Password changed successfully');
         setCurrentPassword('');
         setNewPassword('');
       } else {
-        // Handle the error
-        setMessage('Password change failed'); // Set error message
+        setIsSuccess(false); // Set success status
+        setMessage('Password change failed');
       }
     } catch (error) {
-      setMessage('An error occurred'); // Set error message
+      setIsSuccess(false); // Set success status
+      setMessage('Please check your password');
     }
   };
 
   return (
-  <div className='content'>
-  <Row>
-    <Col>
-    <Card>
-      <CardHeader>
-        <CardTitle tag="h4">Change Password</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <Form onSubmit={handleChangePassword}>
-          <FormGroup>
-            <Label for="currentPassword">Current Password:</Label>
-            <Input
-              type="password"
-              id="currentPassword"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="newPassword">New Password:</Label>
-            <Input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </FormGroup>
-          <Button type="submit" color="primary">
-            Change Password
-          </Button>
-        </Form>
-        <p>{message}</p> {/* Display success/error message */}
-      </CardBody>
-    </Card>
-    </Col>
-    </Row>
+    <div className='content'>
+      <Row>
+        <Col>
+          <Card>
+            <CardHeader>
+              <CardTitle tag="h4">Change Password</CardTitle>
+            </CardHeader>
+            <CardBody>
+              <Form onSubmit={handleChangePassword}>
+                <FormGroup>
+                  <Label for="currentPassword">Current Password:</Label>
+                  <Input
+                    type="password"
+                    id="currentPassword"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="newPassword">New Password:</Label>
+                  <Input
+                    type="password"
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <Button type="submit" color="primary">
+                  Change Password
+                </Button>
+              </Form>
+              {message && (
+                <Alert color={isSuccess ? 'success' : 'danger'}>
+                  {message}
+                </Alert>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };

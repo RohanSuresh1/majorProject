@@ -3,10 +3,12 @@ import axios from 'axios';
 import {
   Button,
   Input,
+  Alert
 } from "reactstrap";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -23,14 +25,25 @@ const ForgetPassword = () => {
       // Handle the response
       console.log('Reset password email sent to:', email);
       setEmail('');
+      setErrorMessage('');
     } catch (error) {
       // Handle error if the API request fails
+      if (error.response) {
+        setErrorMessage('Reset password email could not be sent. Please try again later.');
+      } else {
+        setErrorMessage('An error occurred while sending the reset password email. Please try again later.');
+      }
       console.error('Error sending reset password email:', error);
     }
   };
 
   return (
     <div>
+      {errorMessage && (
+        <Alert color="danger">
+          {errorMessage}
+        </Alert>
+      )}
       <Input
         placeholder="Email-ID"
         type="text"
