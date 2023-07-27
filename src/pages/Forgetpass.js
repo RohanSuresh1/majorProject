@@ -19,7 +19,7 @@ const ForgetPassword = () => {
       // Send reset password request to the API
       const response = await axios.post(
         'https://weatherapp-api.azurewebsites.net/api/Auth/ResetPassword',
-        { email }
+        { EmailId : email }
       );
 
       // Handle the response

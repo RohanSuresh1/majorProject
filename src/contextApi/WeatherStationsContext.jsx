@@ -69,7 +69,7 @@ export const WeatherStationsContextProvider = props => {
     axios.defaults.withCredentials = true;
     axios
       .get(
-        `https://weatherapp-api.azurewebsites.net/api/Sensor/GetSensorReadingBetweenDates?weatherStationId=1&startDate=2023-07-08&endDate=2023-07-12`,
+        `https://weatherapp-api.azurewebsites.net/api/Sensor/GetSensorReadingBetweenDates?weatherStationId=1&startDate=${startDate}&endDate=${endDate}`,
         {
           weatherStationId: currentWeatherStationID,
           startDate,

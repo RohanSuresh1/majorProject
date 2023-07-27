@@ -57,6 +57,7 @@ const UserView = () => {
   const currentWeatherStationID = wStationCtx?.allWeatherStations?.filter(
     item => item.weatherStationName === wStationCtx.currentWeatherStation
   )[0].weatherStationID;
+  console.log(currentWeatherStationID,wStationCtx.allWeatherStations,wStationCtx.currentWeatherStation);
   axios.defaults.withCredentials = true;
   function fetchUserData(fetchRolesFlag = false) {
     axios
@@ -112,8 +113,8 @@ const UserView = () => {
       setLastNameError('');
     }
 
-    if (!contactNumber.match(/^\d{11}$/)) {
-      setContactNumberError('Contact number should be 11 digits');
+    if (!contactNumber.match(/^\d{12}$/)) {
+      setContactNumberError('Contact number should be 12 digits');
       isValid = false;
     } else {
       setContactNumberError('');
@@ -136,7 +137,7 @@ const UserView = () => {
     return isValid;
   };
 
-  const handleAddUser = () => {
+  const handleAddUser = (currentWeatherStationID) => {
     if (validateForm()) {
       const roleId = selectedRole.roleId;
       const userData = {
@@ -145,8 +146,9 @@ const UserView = () => {
         contactNumber,
         emailId,
         roleId: roleId,
-        weatherStationId: selectedWeatherStationId
+        weatherStationId: currentWeatherStationID
       };
+      console.log(selectedWeatherStationId)
       axios
         .post(
           `https://weatherapp-api.azurewebsites.net/api/User/CreateUser?CreatedBy=${authCtx.loggedUserId}`,
@@ -476,7 +478,7 @@ const UserView = () => {
               </Form>
             </ModalBody>
             <ModalFooter className='justify-content-center'>
-              <Button color='primary' onClick={handleAddUser}>
+              <Button color='primary' onClick={()=>{handleAddUser(currentWeatherStationID)}}>
                 Add
               </Button>{' '}
               <Button color='secondary' onClick={toggleModal}>
